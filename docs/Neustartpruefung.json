@@ -1,0 +1,57 @@
+{
+  "status": "BESTANDEN",
+  "zeit_vorher": "2026-11-05T10:48:48.304097+01:00",
+  "marker": "0be94b5d805a4349808d513fd9629432",
+  "projekt": {
+    "id": 34,
+    "name": "Neustartprüfung 0be94b5d",
+    "description": "0be94b5d805a4349808d513fd9629432",
+    "archived": false,
+    "memberIds": [],
+    "memberNames": [],
+    "totalTasks": 0,
+    "doneTasks": 0,
+    "progress": 0
+  },
+  "aufgabe": {
+    "id": 34,
+    "title": "Gespeicherte Prüfaufgabe 0be94b5d",
+    "description": "0be94b5d805a4349808d513fd9629432",
+    "status": "DONE",
+    "assigneeId": null,
+    "assigneeName": null,
+    "projectId": 34
+  },
+  "zeit_nachher": "2026-11-05T10:49:04.646504+01:00",
+  "projekt_nachher": {
+    "id": 34,
+    "name": "Neustartprüfung 0be94b5d",
+    "description": "0be94b5d805a4349808d513fd9629432",
+    "archived": false,
+    "memberIds": [],
+    "memberNames": [],
+    "totalTasks": 1,
+    "doneTasks": 1,
+    "progress": 100
+  },
+  "aufgabe_nachher": {
+    "id": 34,
+    "title": "Gespeicherte Prüfaufgabe 0be94b5d",
+    "description": "0be94b5d805a4349808d513fd9629432",
+    "status": "DONE",
+    "assigneeId": null,
+    "assigneeName": null,
+    "projectId": 34
+  },
+  "geprueft": [
+    "Projektkennung und Name",
+    "eindeutige Beschreibung",
+    "Aufgabenkennung und Beschreibung",
+    "Status DONE",
+    "Fortschritt 100 Prozent"
+  ],
+  "prozess_vorher": 8428,
+  "prozess_nachher": 8404,
+  "datenspeicher": "H2-Datei backend/daten/abnahme.mv.db",
+  "prozess_beendet": true
+}

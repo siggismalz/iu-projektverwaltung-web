@@ -1,0 +1,16 @@
+digraph db {
+ graph [rankdir=TB,bgcolor="white",nodesep=.7,ranksep=.6,pad=.2];
+ node [shape=record,style=filled,fillcolor="#f2f6f7",fontname="Arial",fontsize=14,color="#34495e"];
+ edge [fontname="Arial",fontsize=11,color="#34495e"];
+ tenants[label="{tenants|PK id\lname (UNIQUE)\l}"];
+ users[label="{app_users|PK id\lFK tenant_id (NOT NULL)\lusername (UNIQUE)\ldisplay_name\lpassword_hash\lrole\l}"];
+ projects[label="{projects|PK id\lFK tenant_id (NOT NULL)\lname\ldescription\larchived\l}"];
+ members[label="{project_members|FK project_id\lFK user_id\lUNIQUE (project_id, user_id)\l}"];
+ tasks[label="{tasks|PK id\lFK project_id (NOT NULL)\lFK assignee_id (optional)\ltitle, description\lstatus\l}"];
+ users -> tenants [label="n:1"];
+ projects -> tenants [label="n:1"];
+ members -> users [label="n:1"];
+ members -> projects [label="n:1"];
+ tasks -> projects [label="n:1"];
+ tasks -> users [label="n:0..1"];
+}

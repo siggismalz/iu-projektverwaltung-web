@@ -1,0 +1,389 @@
+{
+  "zeitpunkt": "2026-11-05T10:48:29.807925+01:00",
+  "basis_url": "http://127.0.0.1:8080",
+  "browser": "Google Chrome, headless über Playwright",
+  "desktop": {
+    "width": 1440,
+    "height": 1000
+  },
+  "mobil": {
+    "width": 390,
+    "height": 844
+  },
+  "szenarien": [
+    {
+      "name": "Ungültige Anmeldung zeigt echte Fehlermeldung",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "http_status": 401,
+        "sichtbare_meldung": "Benutzername oder Passwort ist falsch."
+      }
+    },
+    {
+      "name": "Gültige Anmeldung öffnet Projektübersicht",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "benutzername": "admin",
+        "rolle": "ADMIN",
+        "sichtbare_projekte": 2
+      }
+    },
+    {
+      "name": "Seitennavigation und Browser-Zurück",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "navigation": "Übersicht → Detail → Übersicht → Browser-Zurück → Detail → Übersicht"
+      }
+    },
+    {
+      "name": "Projektsuche und verständlicher Leerzustand",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "suche": "Kundenportal",
+        "leerzustand": "Keine passenden Projekte",
+        "zurueckgesetzt": true
+      }
+    },
+    {
+      "name": "Tastaturbedienung, Dialog-Fokus und Escape",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "oeffnen": "Enter",
+        "fokus_anfangs": "Projektname",
+        "tab_schritte": [
+          {
+            "tag": "TEXTAREA",
+            "id": "project-description",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "INPUT",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "INPUT",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "INPUT",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "BODY",
+            "id": "",
+            "inDialog": false,
+            "outsideControl": false
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "INPUT",
+            "id": "project-name",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "TEXTAREA",
+            "id": "project-description",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "INPUT",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          },
+          {
+            "tag": "INPUT",
+            "id": "",
+            "inDialog": true,
+            "outsideControl": false
+          }
+        ],
+        "hintergrund_steuerung_nicht_fokussiert": true,
+        "schliessen": "Escape",
+        "fokus_zurueck": "Neues Projekt"
+      }
+    },
+    {
+      "name": "Mobile Darstellung und Aufgabendialog ohne horizontalen Überlauf",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "uebersicht": {
+          "viewport": 390,
+          "document": 390,
+          "body": 390,
+          "dialog": null
+        },
+        "aufgabendialog": {
+          "viewport": 390,
+          "document": 390,
+          "body": 390,
+          "dialog": {
+            "width": 350,
+            "scroll": 350,
+            "left": 19,
+            "right": 371
+          }
+        },
+        "eingaben_nicht_gespeichert": true
+      }
+    },
+    {
+      "name": "Benutzerkonto über Oberfläche anlegen",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "id": 33,
+        "username": "browsercheck",
+        "displayName": "Prüfkonto Browsertest",
+        "role": "MEMBER"
+      }
+    },
+    {
+      "name": "Benutzerrolle über Oberfläche ändern",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "benutzername": "browsercheck",
+        "vorher": "MEMBER",
+        "nachher": "LEAD"
+      }
+    },
+    {
+      "name": "Projekt mit mehreren Teammitgliedern anlegen",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "id": 33,
+        "name": "Prüfprojekt Browsertest",
+        "description": "Fiktives Projekt zur realen Browserabnahme und späteren Persistenzprüfung.",
+        "archived": false,
+        "memberIds": [
+          1,
+          2,
+          3
+        ],
+        "memberNames": [
+          "Demo Administration",
+          "Demo Projektleitung",
+          "Demo Mitarbeit"
+        ],
+        "totalTasks": 0,
+        "doneTasks": 0,
+        "progress": 0
+      }
+    },
+    {
+      "name": "Aufgabe mit gültiger Teamzuweisung anlegen",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "id": 33,
+        "title": "Browserabnahme durchführen",
+        "description": "Navigation, Formulare und Fortschrittsanzeige in der laufenden Anwendung prüfen.",
+        "status": "OPEN",
+        "assigneeId": 3,
+        "assigneeName": "Demo Mitarbeit",
+        "projectId": 33
+      }
+    },
+    {
+      "name": "Aufgabe bearbeiten und Abschluss im Projektfortschritt nachweisen",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "geänderter_titel": "Browserabnahme abgeschlossen",
+        "status": "DONE",
+        "gesamt": 1,
+        "erledigt": 1,
+        "fortschritt_prozent": 100
+      }
+    },
+    {
+      "name": "Archivierung und schreibgeschützte Aufgabenansicht",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "archiviert": true,
+        "aufgabenaktionen_ausgeblendet": true,
+        "archivfilter": "Archivierte Projekte"
+      }
+    },
+    {
+      "name": "Abmelden beendet die Sitzung",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "anmeldeseite_sichtbar": true,
+        "session_http_status": 401
+      }
+    },
+    {
+      "name": "Mitarbeitendenrolle sieht nur zugeordnete Projekte und passende Aktionen",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "benutzername": "mitarbeiter",
+        "sichtbare_projekte_api": [
+          "Intranet-Relaunch",
+          "Prüfprojekt Browsertest"
+        ],
+        "administration_ausgeblendet": true,
+        "aufgabenaktion_erreichbar": true
+      }
+    },
+    {
+      "name": "Separater Mandant zeigt ausschließlich eigene Projekte",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "benutzername": "fremd",
+        "sichtbare_projekte": [
+          "Fremdes Projekt"
+        ],
+        "andere_mandanten_unsichtbar": true
+      }
+    },
+    {
+      "name": "Keine JavaScript-Laufzeitfehler oder HTTP-5xx im beobachteten Ablauf",
+      "status": "BESTANDEN",
+      "nachweis": {
+        "javascript_pageerror": 0,
+        "http_5xx": 0,
+        "erwartete_401_403": 2
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "datei": "docs/screenshots/01_Login.png",
+      "beschreibung": "Tatsächliche Anmeldeseite vor der Eingabe.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "vor_testdatenmutation": true
+    },
+    {
+      "datei": "docs/screenshots/02_Projektuebersicht.png",
+      "beschreibung": "Projektübersicht der Administration mit echten persistenten Demodaten.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "vor_testdatenmutation": true
+    },
+    {
+      "datei": "docs/screenshots/03_Projektaufgaben.png",
+      "beschreibung": "Projekt Intranet-Relaunch mit Team, Fortschritt und drei tatsächlichen Aufgaben.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "vor_testdatenmutation": true
+    },
+    {
+      "datei": "docs/screenshots/05_Projektdialog.png",
+      "beschreibung": "Tatsächlicher Dialog zum Anlegen eines Projekts mit Mehrfachauswahl des Teams.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "vor_testdatenmutation": true
+    },
+    {
+      "datei": "docs/screenshots/04_Benutzerverwaltung.png",
+      "beschreibung": "Benutzerverwaltung mit den drei fiktiven Konten des ersten Mandanten.",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "vor_testdatenmutation": true
+    },
+    {
+      "datei": "docs/screenshots/06_Mobil_Projekte.png",
+      "beschreibung": "Reale mobile Projektübersicht bei 390 × 844 CSS-Pixeln, ohne horizontales Überlaufen.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "vor_testdatenmutation": true
+    },
+    {
+      "datei": "docs/screenshots/07_Mobil_Aufgabe.png",
+      "beschreibung": "Realer mobiler Aufgabendialog mit Eingaben; anschließend ohne Speicherung geschlossen.",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "vor_testdatenmutation": true
+    }
+  ],
+  "javascript_fehler": [],
+  "serverfehler_5xx": [],
+  "erwartete_http_fehler": [
+    {
+      "url": "http://127.0.0.1:8080/api/session",
+      "status": 401
+    },
+    {
+      "url": "http://127.0.0.1:8080/api/login",
+      "status": 401
+    }
+  ],
+  "testdaten": {
+    "benutzer": {
+      "id": 33,
+      "username": "browsercheck",
+      "displayName": "Prüfkonto Browsertest",
+      "role": "LEAD"
+    },
+    "projekt": {
+      "id": 33,
+      "name": "Prüfprojekt Browsertest",
+      "description": "Fiktives Projekt zur realen Browserabnahme und späteren Persistenzprüfung.",
+      "archived": true,
+      "memberIds": [
+        1,
+        2,
+        3
+      ],
+      "memberNames": [
+        "Demo Administration",
+        "Demo Projektleitung",
+        "Demo Mitarbeit"
+      ],
+      "totalTasks": 1,
+      "doneTasks": 1,
+      "progress": 100
+    },
+    "aufgabe": {
+      "id": 33,
+      "title": "Browserabnahme abgeschlossen",
+      "description": "Navigation, Formulare und Fortschrittsanzeige in der laufenden Anwendung prüfen.",
+      "status": "DONE",
+      "assigneeId": 3,
+      "assigneeName": "Demo Mitarbeit",
+      "projectId": 33
+    }
+  },
+  "abgeschlossen": true,
+  "erfolgreich": 16,
+  "fehlgeschlagen": 0
+}

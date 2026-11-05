@@ -1,0 +1,35 @@
+PRÜFERGEBNISSE - 05.11.2026
+
+Backend: 19 Integrationstests bestanden; 0 Fehler, 0 Fehlschläge, 0 übersprungen.
+Gesamtbuild: Bauen.ps1 erfolgreich, einschließlich React-TypeScript-Build und Maven verify.
+Browser: 16 benannte Szenarien bestanden; 0 JavaScript-Laufzeitfehler, 0 HTTP-5xx.
+Google Chrome headless, Desktop 1440 x 1000 und Mobile 390 x 844 CSS-Pixel.
+Dateipersistenz: Projekt und erledigte Aufgabe über HTTP gespeichert, eigener Java-Prozess
+beendet und mit derselben H2-Datei neu gestartet; IDs, Texte, Status und Fortschritt bestätigt.
+
+Browserabläufe:
+01. Ungültige Anmeldung zeigt echte Fehlermeldung: BESTANDEN
+02. Gültige Anmeldung öffnet Projektübersicht: BESTANDEN
+03. Seitennavigation und Browser-Zurück: BESTANDEN
+04. Projektsuche und verständlicher Leerzustand: BESTANDEN
+05. Tastaturbedienung, Dialog-Fokus und Escape: BESTANDEN
+06. Mobile Darstellung und Aufgabendialog ohne horizontalen Überlauf: BESTANDEN
+07. Benutzerkonto über Oberfläche anlegen: BESTANDEN
+08. Benutzerrolle über Oberfläche ändern: BESTANDEN
+09. Projekt mit mehreren Teammitgliedern anlegen: BESTANDEN
+10. Aufgabe mit gültiger Teamzuweisung anlegen: BESTANDEN
+11. Aufgabe bearbeiten und Abschluss im Projektfortschritt nachweisen: BESTANDEN
+12. Archivierung und schreibgeschützte Aufgabenansicht: BESTANDEN
+13. Abmelden beendet die Sitzung: BESTANDEN
+14. Mitarbeitendenrolle sieht nur zugeordnete Projekte und passende Aktionen: BESTANDEN
+15. Separater Mandant zeigt ausschließlich eigene Projekte: BESTANDEN
+16. Keine JavaScript-Laufzeitfehler oder HTTP-5xx im beobachteten Ablauf: BESTANDEN
+
+Detaillierte Belege: Browserpruefung.json, Neustartpruefung.json und backend/PRUEFUNG.txt.
+Die Browserprüfung benötigt eine neue isolierte Abnahme-Datenbank mit unveränderten
+Demodaten. Das Skript legt eigene fiktive Konten und Projekte an. Ein erneuter Lauf gegen
+die bereits veränderte Abnahmedatenbank würde nicht dieselben Voraussetzungen haben.
+Die Screenshotaufnahmen entstanden vor diesen Änderungen.
+
+Grenzen: keine Lastprüfung, kein menschlicher Usability-Test, kein vollständiger
+Sicherheitsaudit und keine umfassende WCAG-Konformitätsbestätigung.

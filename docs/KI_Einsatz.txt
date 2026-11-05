@@ -1,0 +1,42 @@
+KI-EINSATZ IM PROJEKT - 05.11.2026
+
+Verwendetes Werkzeug: Codex in der lokalen Arbeitsumgebung. Die Unterstützung umfasste
+die Auswertung der bereitgestellten Unterlagen, Entwurf, Implementierung, Tests und
+Dokumentation. Es wird keine unabhängig von dieser Unterstützung entstandene Umsetzung
+behauptet. Die persönliche Durchsicht und Verantwortung der einreichenden Person bleiben
+ein eigener Schritt.
+
+Tatsächlicher Ablauf
+
+1. Alle bereitgestellten PDF-Seiten wurden vollständig extrahiert und inhaltlich gelesen.
+   Identische Richtlinien wurden anhand von Hash und Seitentext abgeglichen. Unterlagen
+   anderer Prüfungsformen wurden getrennt eingeordnet.
+2. Die studierende Person wählte ausdrücklich die Projekt- und Aufgabenverwaltung.
+3. Die Implementierungsarbeit wurde auf Backend und Frontend aufgeteilt. Vorher wurden
+   Rollen, Endpunkte, JSON-Felder, Aufgabenstatus, CSRF-Verfahren und Mandantenbezug
+   abgestimmt. Zwei SVG-Entwürfe entstanden vor dem React-Code.
+4. Codex erstellte Java- und React-Code sowie Prüfungen. Ein zusätzlicher Codeabgleich
+   kontrollierte Zugriffsprüfungen, DTOs, Konfiguration und die Übereinstimmung mit dem
+   vereinbarten Ablauf. Frontend-Längenbegrenzungen wurden dabei an die tatsächlichen
+   Backend-Grenzen angepasst.
+5. Fachliche Erklärungen wurden an offiziellen Originaldokumentationen geprüft. Eine
+   Spring-Bezeichnung allein wurde nicht als Nachweis vollständiger REST-Konformität
+   gewertet. Die konkrete Anmeldung verwendet den Spring-Form-Login-Filter und keinen
+   selbst geschriebenen Logincontroller.
+6. Der Backend-Testlauf und der Gesamtbuild wurden tatsächlich ausgeführt. Browser-
+   und Neustartprüfungen erhalten eigene Nachweise; ihr Erfolg wird nicht aus dem
+   Vorhandensein der Testdateien abgeleitet.
+7. Eigene UML- und Datenbankzeichnungen wurden mit den Java-Entitäten und Tabellen
+   abgeglichen. Echte Bildschirmaufnahmen werden von den vorherigen Entwürfen getrennt.
+
+Erfahrungen und Grenzen
+
+Die Aufteilung verkürzte die Bearbeitung, erforderte aber genaue Absprachen. Ein Beispiel
+war das erneute Laden des CSRF-Tokens nach der Anmeldung. Ein weiteres war die Auswahl
+einer verantwortlichen Person ausschließlich aus dem Projektteam. Solche Regeln dürfen
+nicht allein aus einem optisch vollständigen Formular abgeleitet werden.
+
+Eine zusätzliche Prüfung durch dieselbe KI-Umgebung ist keine unabhängige menschliche
+Begutachtung. Quellen, Tests und Bilder machen konkrete Aussagen überprüfbar, ersetzen
+aber das eigene Verständnis der einreichenden Person nicht. Es wurden keine Befragungen,
+Kundentermine, Produktivmessungen oder menschlichen Usability-Tests erfunden.

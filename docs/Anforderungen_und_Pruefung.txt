@@ -1,0 +1,20 @@
+ANFORDERUNGEN UND PRÜFUNG
+
+Anforderung                         Umsetzung                         Prüfbasis
+Benutzer anlegen, Rollen vergeben   UserService, Benutzerverwaltung   Admin/Member/Rollenwechsel
+Projekte anlegen/pflegen/archivieren ProjectService, Projektform       Anlage/Änderung/Archiv
+Mehrere Mitarbeitende zuordnen      Project.members, project_members  Mitgliedschaft/Mandantengrenze
+Aufgaben anlegen/bearbeiten         ProjectService, Aufgabenform      CRUD/Verantwortlichkeit
+Aufgabenstatus ändern               TaskStatus, Aufgabenform          OPEN/IN_PROGRESS/DONE
+Fortschritt anzeigen                erledigt / alle, gerundet         0 Aufgaben/Statusänderung
+Anmelden und abmelden               Spring Security, Loginansicht     Session/CSRF/Logout
+Nur berechtigte Projekte sehen      Mandant und Projektmitgliedschaft Direkte ID, Fremdmandant
+
+Backend: 19 Integrationstests mit vollständigem Spring-Kontext, Securityfiltern, echten
+Services und Repositories sowie isolierter Testdatenbank. Details in backend/PRUEFUNG.txt
+und den nach einem Build erzeugten Surefire-Berichten unter backend/target.
+
+Die produktive lokale Konfiguration verwendet eine H2-Datei. Der isolierte Testkontext
+verwendet eine flüchtige Datenbank. Ein Neustartnachweis und die Browserbedienung werden
+deshalb gesondert dokumentiert. Die endliche Fallauswahl begründet keine vollständige
+Sicherheits-, Last- oder Barrierefreiheitszertifizierung.

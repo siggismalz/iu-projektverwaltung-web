@@ -1,0 +1,16 @@
+digraph architecture {
+ graph [rankdir=TB,bgcolor="white",pad=.25,nodesep=.35,ranksep=.3];
+ node [shape=box,style="rounded,filled",fillcolor="#f2f6f7",fontname="Arial",fontsize=14,color="#34495e",margin=.15];
+ edge [fontname="Arial",fontsize=12,color="#34495e"];
+ UI [label="React\nProjekte · Aufgaben · Benutzer\nZustand und Darstellung"];
+ Security [label="Spring Security\nSitzung · CSRF · Anmeldung"];
+ Controller [label="ApiController\nHTTP und geprüfte DTOs"];
+ Service [label="ProjectService / UserService\nRollen · Mandant · Fachregeln"];
+ Repository [label="JPA-Repositories\nDatenzugriff mit Hibernate"];
+ DB [shape=cylinder,label="H2-Dateidatenbank\ndaten/projektverwaltung.mv.db"];
+ UI -> Security [label="HTTP / JSON"];
+ Security -> Controller;
+ Controller -> Service;
+ Service -> Repository;
+ Repository -> DB;
+}
