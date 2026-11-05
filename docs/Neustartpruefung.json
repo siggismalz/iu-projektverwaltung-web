@@ -1,11 +1,173 @@
 {
   "status": "BESTANDEN",
-  "zeit_vorher": "2026-11-05T10:48:48.304097+01:00",
-  "marker": "0be94b5d805a4349808d513fd9629432",
+  "beginn": "2026-11-05T11:14:34.269948+01:00",
+  "pruefung": "API speichern, ohne Wartezeit eigenen Prozess abbrechen, aus derselben Datei neu laden",
+  "datenbank": "isolierter Prüflaufordner/daten.mv.db",
+  "quelle_einstellung": "https://h2database.github.io/html/commands.html#set_write_delay",
+  "durchlaeufe": [
+    {
+      "nummer": 1,
+      "status": "BESTANDEN",
+      "zeit_vorher": "2026-11-05T11:14:41.604007+01:00",
+      "zeit_nachher": "2026-11-05T11:14:49.789029+01:00",
+      "abbruch_nach_apiantwort_ms": 0.434,
+      "prozess_vorher": 14692,
+      "prozess_nachher": 11068,
+      "marker": "56464bffdb094b7bb5fa61404afa7e11",
+      "projekt": {
+        "id": 4,
+        "name": "Neustartprüfung 56464bff",
+        "description": "56464bffdb094b7bb5fa61404afa7e11",
+        "archived": false,
+        "memberIds": [],
+        "memberNames": [],
+        "totalTasks": 0,
+        "doneTasks": 0,
+        "progress": 0
+      },
+      "aufgabe": {
+        "id": 7,
+        "title": "Gespeicherte Prüfaufgabe 56464bff",
+        "description": "56464bffdb094b7bb5fa61404afa7e11",
+        "status": "DONE",
+        "assigneeId": null,
+        "assigneeName": null,
+        "projectId": 4
+      },
+      "projekt_nachher": {
+        "id": 4,
+        "name": "Neustartprüfung 56464bff",
+        "description": "56464bffdb094b7bb5fa61404afa7e11",
+        "archived": false,
+        "memberIds": [],
+        "memberNames": [],
+        "totalTasks": 1,
+        "doneTasks": 1,
+        "progress": 100
+      },
+      "aufgabe_nachher": {
+        "id": 7,
+        "title": "Gespeicherte Prüfaufgabe 56464bff",
+        "description": "56464bffdb094b7bb5fa61404afa7e11",
+        "status": "DONE",
+        "assigneeId": null,
+        "assigneeName": null,
+        "projectId": 4
+      }
+    },
+    {
+      "nummer": 2,
+      "status": "BESTANDEN",
+      "zeit_vorher": "2026-11-05T11:14:50.050586+01:00",
+      "zeit_nachher": "2026-11-05T11:14:57.744090+01:00",
+      "abbruch_nach_apiantwort_ms": 0.494,
+      "prozess_vorher": 11068,
+      "prozess_nachher": 17812,
+      "marker": "ef0921e644604c369f065d5e875d99ae",
+      "projekt": {
+        "id": 33,
+        "name": "Neustartprüfung ef0921e6",
+        "description": "ef0921e644604c369f065d5e875d99ae",
+        "archived": false,
+        "memberIds": [],
+        "memberNames": [],
+        "totalTasks": 0,
+        "doneTasks": 0,
+        "progress": 0
+      },
+      "aufgabe": {
+        "id": 33,
+        "title": "Gespeicherte Prüfaufgabe ef0921e6",
+        "description": "ef0921e644604c369f065d5e875d99ae",
+        "status": "DONE",
+        "assigneeId": null,
+        "assigneeName": null,
+        "projectId": 33
+      },
+      "projekt_nachher": {
+        "id": 33,
+        "name": "Neustartprüfung ef0921e6",
+        "description": "ef0921e644604c369f065d5e875d99ae",
+        "archived": false,
+        "memberIds": [],
+        "memberNames": [],
+        "totalTasks": 1,
+        "doneTasks": 1,
+        "progress": 100
+      },
+      "aufgabe_nachher": {
+        "id": 33,
+        "title": "Gespeicherte Prüfaufgabe ef0921e6",
+        "description": "ef0921e644604c369f065d5e875d99ae",
+        "status": "DONE",
+        "assigneeId": null,
+        "assigneeName": null,
+        "projectId": 33
+      }
+    },
+    {
+      "nummer": 3,
+      "status": "BESTANDEN",
+      "zeit_vorher": "2026-11-05T11:14:57.960109+01:00",
+      "zeit_nachher": "2026-11-05T11:15:03.598892+01:00",
+      "abbruch_nach_apiantwort_ms": 0.279,
+      "prozess_vorher": 17812,
+      "prozess_nachher": 28232,
+      "marker": "f932b1d668764f04bdb91d7b863eab1e",
+      "projekt": {
+        "id": 65,
+        "name": "Neustartprüfung f932b1d6",
+        "description": "f932b1d668764f04bdb91d7b863eab1e",
+        "archived": false,
+        "memberIds": [],
+        "memberNames": [],
+        "totalTasks": 0,
+        "doneTasks": 0,
+        "progress": 0
+      },
+      "aufgabe": {
+        "id": 65,
+        "title": "Gespeicherte Prüfaufgabe f932b1d6",
+        "description": "f932b1d668764f04bdb91d7b863eab1e",
+        "status": "DONE",
+        "assigneeId": null,
+        "assigneeName": null,
+        "projectId": 65
+      },
+      "projekt_nachher": {
+        "id": 65,
+        "name": "Neustartprüfung f932b1d6",
+        "description": "f932b1d668764f04bdb91d7b863eab1e",
+        "archived": false,
+        "memberIds": [],
+        "memberNames": [],
+        "totalTasks": 1,
+        "doneTasks": 1,
+        "progress": 100
+      },
+      "aufgabe_nachher": {
+        "id": 65,
+        "title": "Gespeicherte Prüfaufgabe f932b1d6",
+        "description": "f932b1d668764f04bdb91d7b863eab1e",
+        "status": "DONE",
+        "assigneeId": null,
+        "assigneeName": null,
+        "projectId": 65
+      }
+    }
+  ],
+  "abgeschlossen": "2026-11-05T11:15:03.599890+01:00",
+  "wiederholungen": 3,
+  "zeit_vorher": "2026-11-05T11:14:57.960109+01:00",
+  "zeit_nachher": "2026-11-05T11:15:03.598892+01:00",
+  "abbruch_nach_apiantwort_ms": 0.279,
+  "prozess_vorher": 17812,
+  "prozess_nachher": 28232,
+  "marker": "f932b1d668764f04bdb91d7b863eab1e",
   "projekt": {
-    "id": 34,
-    "name": "Neustartprüfung 0be94b5d",
-    "description": "0be94b5d805a4349808d513fd9629432",
+    "id": 65,
+    "name": "Neustartprüfung f932b1d6",
+    "description": "f932b1d668764f04bdb91d7b863eab1e",
     "archived": false,
     "memberIds": [],
     "memberNames": [],
@@ -14,19 +176,18 @@
     "progress": 0
   },
   "aufgabe": {
-    "id": 34,
-    "title": "Gespeicherte Prüfaufgabe 0be94b5d",
-    "description": "0be94b5d805a4349808d513fd9629432",
+    "id": 65,
+    "title": "Gespeicherte Prüfaufgabe f932b1d6",
+    "description": "f932b1d668764f04bdb91d7b863eab1e",
     "status": "DONE",
     "assigneeId": null,
     "assigneeName": null,
-    "projectId": 34
+    "projectId": 65
   },
-  "zeit_nachher": "2026-11-05T10:49:04.646504+01:00",
   "projekt_nachher": {
-    "id": 34,
-    "name": "Neustartprüfung 0be94b5d",
-    "description": "0be94b5d805a4349808d513fd9629432",
+    "id": 65,
+    "name": "Neustartprüfung f932b1d6",
+    "description": "f932b1d668764f04bdb91d7b863eab1e",
     "archived": false,
     "memberIds": [],
     "memberNames": [],
@@ -35,23 +196,16 @@
     "progress": 100
   },
   "aufgabe_nachher": {
-    "id": 34,
-    "title": "Gespeicherte Prüfaufgabe 0be94b5d",
-    "description": "0be94b5d805a4349808d513fd9629432",
+    "id": 65,
+    "title": "Gespeicherte Prüfaufgabe f932b1d6",
+    "description": "f932b1d668764f04bdb91d7b863eab1e",
     "status": "DONE",
     "assigneeId": null,
     "assigneeName": null,
-    "projectId": 34
+    "projectId": 65
   },
-  "geprueft": [
-    "Projektkennung und Name",
-    "eindeutige Beschreibung",
-    "Aufgabenkennung und Beschreibung",
-    "Status DONE",
-    "Fortschritt 100 Prozent"
-  ],
-  "prozess_vorher": 8428,
-  "prozess_nachher": 8404,
-  "datenspeicher": "H2-Datei backend/daten/abnahme.mv.db",
-  "prozess_beendet": true
+  "grenze": "Kein Test eines Stromausfalls, defekter Datenträger oder der Wiederherstellung aus einer Sicherung.",
+  "datenspeicher": "Isolierte H2-Datei im protokollierten Prüflaufordner",
+  "prozess_beendet": true,
+  "latenzmessung": "Zeit von Rückkehr der HTTP-Speicherfunktion bis Rückkehr aus Popen.kill(); das Ende des eigenen Prozesses wird danach mit wait() abgewartet."
 }

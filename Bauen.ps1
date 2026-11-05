@@ -20,7 +20,7 @@ if (-not (Get-Command npm.cmd -ErrorAction SilentlyContinue)) { throw 'Node.js m
 Push-Location (Join-Path $projektPfad 'frontend')
 try {
     & npm.cmd ci
-    if ($LASTEXITCODE -ne 0) { throw 'Installation der Frontend-Abhängigkeiten fehlgeschlagen.' }
+    if ($LASTEXITCODE -ne 0) { throw 'Frontend-Abhängigkeiten konnten nicht installiert werden. Beende einen laufenden Vite-Entwicklungsserver oder eine Vorschau dieses Projekts und starte Bauen.ps1 erneut. Die genaue npm-Meldung steht darüber.' }
     & npm.cmd run build
     if ($LASTEXITCODE -ne 0) { throw 'Frontend-Build fehlgeschlagen.' }
 } finally { Pop-Location }

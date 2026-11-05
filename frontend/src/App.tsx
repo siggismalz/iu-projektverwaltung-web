@@ -65,17 +65,18 @@ export default function App() {
   if (session === undefined) return <main className="startup"><Brand />{bootError ? <ErrorNotice message={bootError} onRetry={() => void boot()} /> : <Loading text="Arbeitsbereich wird geöffnet …" />}</main>;
   if (!session) return <Login onLogin={s => { location.hash = 'projects'; setSession(s); }} />;
   const isUsers = route === 'users';
+  const detailProject = route.startsWith('project/') ? projects.find(project => project.id === Number(route.split('/')[1])) : undefined;
   return <div className="app-shell">
     <a href="#main" className="skip-link" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Zum Inhalt springen</a>
     <aside className="sidebar"><a className="brand-link" href="#projects" aria-label="Projektwerk – zur Projektübersicht"><Brand /></a><div className="workspace-label">ARBEITSBEREICH</div><nav aria-label="Hauptnavigation"><a href="#projects" className={!isUsers ? 'active' : ''} aria-current={!isUsers ? 'page' : undefined}><Icon name="projects" />Projekte<span className="nav-count">{projects.filter(p => !p.archived).length}</span></a>{session.role === 'ADMIN' && <a href="#users" className={isUsers ? 'active' : ''} aria-current={isUsers ? 'page' : undefined}><Icon name="users" />Benutzerverwaltung</a>}</nav><div className="sidebar-bottom"><div className="tenant-label">{session.tenantName}</div><div className="account"><span className="avatar">{session.displayName.split(' ').map(p => p[0]).slice(0, 2).join('')}</span><div><strong>{session.displayName}</strong><small>{roleNames[session.role]}</small></div></div><button className="logout-button" onClick={() => void logout()} disabled={logoutBusy}><Icon name="logout" />{logoutBusy ? 'Abmeldung läuft …' : 'Abmelden'}</button></div></aside>
-    <div className="main-column"><header className="topbar"><span>Arbeitsbereich <span aria-hidden="true">/</span> <strong>{isUsers ? 'Benutzerverwaltung' : 'Projekte'}</strong></span><span className="topbar-tenant">{session.tenantName}</span></header>
+    <div className="main-column"><header className="topbar"><nav className="breadcrumbs" aria-label="Seitennavigation"><ol><li>Arbeitsbereich</li>{detailProject ? <><li><a href="#projects" aria-label="Zur Projektübersicht">Projekte</a></li><li><span aria-current="page">{detailProject.name}</span></li></> : <li><span aria-current="page">{isUsers ? 'Benutzerverwaltung' : 'Projekte'}</span></li>}</ol></nav><span className="topbar-tenant">{session.tenantName}</span></header>
       <main id="main" tabIndex={-1} className="main-content">
         {notice && <div className="notice success" role="status"><Icon name="check" /><span>{notice}</span><button className="icon-button" aria-label="Hinweis schließen" onClick={() => setNotice('')}><Icon name="close" size={18} /></button></div>}
         {error && <ErrorNotice message={error} onRetry={() => void load()} />}
         {loading && projects.length === 0 ? <Loading /> : isUsers
           ? session.role === 'ADMIN' ? <Users users={users} session={session} onSaved={async message => { setNotice(message); await load(); }} /> : <ErrorNotice message="Die Benutzerverwaltung ist nur für die Administration verfügbar." />
           : <Projects projects={projects} users={users} session={session} route={route} loading={loading} onSaved={async message => { setNotice(message); await load(); }} />}
-      </main><footer className="app-footer"><span>Projektwerk</span><span>Gemeinsam den nächsten Schritt machen.</span></footer>
+      </main><footer className="app-footer"><span>Projektwerk</span><span>Projekt- und Aufgabenverwaltung</span></footer>
     </div>
   </div>;
 }

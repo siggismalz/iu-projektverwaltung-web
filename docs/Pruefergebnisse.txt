@@ -1,13 +1,20 @@
-PRÜFERGEBNISSE - 05.11.2026
+PRÜFERGEBNISSE NACH DEM FEINSCHLIFF - 05.11.2026
 
-Backend: 19 Integrationstests bestanden; 0 Fehler, 0 Fehlschläge, 0 übersprungen.
-Gesamtbuild: Bauen.ps1 erfolgreich, einschließlich React-TypeScript-Build und Maven verify.
-Browser: 16 benannte Szenarien bestanden; 0 JavaScript-Laufzeitfehler, 0 HTTP-5xx.
-Google Chrome headless, Desktop 1440 x 1000 und Mobile 390 x 844 CSS-Pixel.
-Dateipersistenz: Projekt und erledigte Aufgabe über HTTP gespeichert, eigener Java-Prozess
-beendet und mit derselben H2-Datei neu gestartet; IDs, Texte, Status und Fortschritt bestätigt.
+Gesamtbuild erfolgreich, 19 Backend-Integrationstests bestanden, keine Fehler/übersprungen.
+16 Browser-Szenarien gegen die finale JAR bestanden, keine JavaScript-Laufzeitfehler/HTTP-5xx.
+Desktop 1440 x 1000, Mobil 390 x 844 CSS-Pixel; neue Aufnahmen vor den Testmutationen.
+Innerhalb bestehender Szenarien zusätzlich lesbare Sekundärtexte und Projekt-Breadcrumb geprüft.
 
-Browserabläufe:
+Dateipersistenz nach sofortigem Abbruch des eigenen Prozesses: 3 von 3 Durchläufen bestanden.
+Durchlauf 1: Abbruch 0.434 ms nach API-Antwort; Projekt/Task/Status/Fortschritt nach Neustart unverändert.
+Durchlauf 2: Abbruch 0.494 ms nach API-Antwort; Projekt/Task/Status/Fortschritt nach Neustart unverändert.
+Durchlauf 3: Abbruch 0.279 ms nach API-Antwort; Projekt/Task/Status/Fortschritt nach Neustart unverändert.
+
+Zuvor trat beim unmittelbaren Abbruch mit verzögertem H2-Log-Flush ein Datenverlust auf.
+Korrektur: SET WRITE_DELAY 0 bei jedem Datenbank-Verbindungsaufbau.
+Grenzen: keine Garantie bei Stromausfall, defektem Datenträger oder fehlender Datensicherung.
+
+Einzeln benannte Browserfälle:
 01. Ungültige Anmeldung zeigt echte Fehlermeldung: BESTANDEN
 02. Gültige Anmeldung öffnet Projektübersicht: BESTANDEN
 03. Seitennavigation und Browser-Zurück: BESTANDEN
@@ -25,11 +32,5 @@ Browserabläufe:
 15. Separater Mandant zeigt ausschließlich eigene Projekte: BESTANDEN
 16. Keine JavaScript-Laufzeitfehler oder HTTP-5xx im beobachteten Ablauf: BESTANDEN
 
-Detaillierte Belege: Browserpruefung.json, Neustartpruefung.json und backend/PRUEFUNG.txt.
-Die Browserprüfung benötigt eine neue isolierte Abnahme-Datenbank mit unveränderten
-Demodaten. Das Skript legt eigene fiktive Konten und Projekte an. Ein erneuter Lauf gegen
-die bereits veränderte Abnahmedatenbank würde nicht dieselben Voraussetzungen haben.
-Die Screenshotaufnahmen entstanden vor diesen Änderungen.
-
-Grenzen: keine Lastprüfung, kein menschlicher Usability-Test, kein vollständiger
-Sicherheitsaudit und keine umfassende WCAG-Konformitätsbestätigung.
+Nachweise: Browserpruefung.json, Neustartpruefung.json, backend/PRUEFUNG.txt.
+Keine Lastprüfung, kein menschlicher Usability-Test, kein vollständiger Sicherheits- oder WCAG-Nachweis.

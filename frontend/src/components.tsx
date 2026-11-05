@@ -17,7 +17,7 @@ export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[name]} /></svg>;
 }
 export function Brand() {
-  return <span className="brand"><span className="brand-mark" aria-hidden="true">p<span> /</span></span><span>projektwerk<span className="brand-sub">PROJEKTE. KLAR ORGANISIERT.</span></span></span>;
+  return <span className="brand"><span className="brand-mark" aria-hidden="true">p<span> /</span></span><span>projektwerk<span className="brand-sub">PROJEKTVERWALTUNG</span></span></span>;
 }
 export function ErrorNotice({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return <div className="notice error" role="alert"><div><strong>Das hat nicht geklappt.</strong><p>{message}</p></div>{onRetry && <button className="button secondary" onClick={onRetry}>Erneut versuchen</button>}</div>;

@@ -40,3 +40,17 @@ Eine zusätzliche Prüfung durch dieselbe KI-Umgebung ist keine unabhängige men
 Begutachtung. Quellen, Tests und Bilder machen konkrete Aussagen überprüfbar, ersetzen
 aber das eigene Verständnis der einreichenden Person nicht. Es wurden keine Befragungen,
 Kundentermine, Produktivmessungen oder menschlichen Usability-Tests erfunden.
+
+Feinschliff nach der ersten vollständigen Fassung
+
+Die Sekundärtexte der Oberfläche wurden vergrößert, Beschriftungen konkretisiert und
+Projekt-Breadcrumbs ergänzt. Die Diagramme erhielten übersichtlichere Anordnungen.
+Neue Bildschirmaufnahmen und der erneute vollständige Browserlauf belegen denselben
+Stand der Anwendung. Die vorherigen Entwurfsbilder wurden erhalten.
+
+Ein zusätzlich verschärfter Test zeigte, dass unmittelbar nach der API-Bestätigung
+bei erzwungenem Prozessabbruch noch Daten verloren gehen konnten. Nach Prüfung der
+H2-Dokumentation wurde die verzögerte Log-Schreibung mit SET WRITE_DELAY 0 abgeschaltet.
+Der ergänzte Test startet eigene Prozesse und prüft drei sofortige Abbrüche mit erneuter
+Anmeldung und Datenvergleich. Alle drei Fälle bestanden. Daraus folgt keine Garantie
+für Stromausfälle oder beschädigte Datenträger.

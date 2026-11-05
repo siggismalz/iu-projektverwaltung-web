@@ -64,3 +64,13 @@ java -jar target/projektverwaltung-1.0.0.jar --spring.datasource.url=jdbc:h2:fil
 ```
 
 In einer zweiten Konsole im Repository `python tests/browserpruefung.py` ausführen. Auf Port 8080 darf dabei keine andere Instanz laufen. Die Prüfung setzt unveränderte Demodaten voraus und verändert fiktive Konten und Projekte. Für einen erneuten Lauf einen neuen Datenbanknamen wählen. Ergebnisse entstehen unter `tests/Bericht`, bestehende Anwendungsdaten werden nicht gelöscht. Die einzelnen Backend-, Browser- und Neustartnachweise sind in `docs/Pruefergebnisse.txt` eingeordnet.
+
+## Diagramme und Dateipersistenz
+
+Die technischen Diagramme liegen als bearbeitbare SVG und hochauflösende PNG unter `docs`. Sie lassen sich mit Python und `cairosvg` durch `python docs/Diagramme_erzeugen.py` erneut erzeugen.
+
+H2 wird beim Verbindungsaufbau mit `SET WRITE_DELAY 0` konfiguriert. So wird das Schreiben des Transaktionsprotokolls nach dem Commit nicht zeitlich aufgeschoben. Der zusätzliche Prozessabbruchtest hat dreimal bestätigt, dass Projekt und Aufgabe auch bei unmittelbarem Beenden des eigenen Java-Prozesses nach der API-Bestätigung wieder verfügbar sind. Das ist kein Stromausfall- oder Backup-Test. Hintergrund der Einstellung: [H2 Commands, SET WRITE_DELAY](https://h2database.github.io/html/commands.html#set_write_delay).
+
+Nach `python -m pip install requests` kann `python tests/dateipersistenz_pruefen.py` den Test wiederholen. Er benötigt JDK 21, die zuvor gebaute JAR und den freien Port 8081. Bei Bedarf `--java` mit dem Pfad zu Java 21 oder `--port` mit einem anderen freien Port angeben. Das Skript startet ausschließlich eigene Prozesse und legt seine isolierte Datenbank und das Ergebnis unter `tests/Ergebnisse` ab. Vorhandene Anwendungsdaten werden nicht benutzt.
+
+Unter Windows vor `Bauen.ps1` einen laufenden Vite-Entwicklungsserver dieses Projekts beenden, damit `npm ci` die nativen Builddateien austauschen kann.

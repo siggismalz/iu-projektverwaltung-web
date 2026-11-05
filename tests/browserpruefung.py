@@ -114,7 +114,9 @@ def main():
             session = get_json(page, '/session')
             assert session['role'] == 'ADMIN'
             assert len(get_json(page, '/projects')) == 2
-            return {'benutzername': session['username'], 'rolle': session['role'], 'sichtbare_projekte': 2}
+            readable = page.locator('.table-description, .team-names, .progress-caption, .badge, .panel-heading p').evaluate_all('els => els.filter(el => el.getClientRects().length).map(el => ({klasse:el.className,schrift:parseFloat(getComputedStyle(el).fontSize)}))')
+            assert readable and all(item['schrift'] >= 12 for item in readable), readable
+            return {'benutzername': session['username'], 'rolle': session['role'], 'sichtbare_projekte': 2, 'lesbarkeit_desktop': readable}
         scenario('Gültige Anmeldung öffnet Projektübersicht', good_login)
         screenshot(page, '02_Projektuebersicht.png', 'Projektübersicht der Administration mit echten persistenten Demodaten.')
 
@@ -122,6 +124,7 @@ def main():
             page.get_by_role('link', name='Intranet-Relaunch', exact=True).click()
             expect(page.get_by_role('heading', name='Intranet-Relaunch', exact=True)).to_be_visible()
             expect(page.get_by_role('heading', name='Seitennavigation entwerfen', exact=True)).to_be_visible()
+            expect(page.get_by_role('navigation', name='Seitennavigation').locator('[aria-current="page"]')).to_have_text('Intranet-Relaunch')
             screenshot(page, '03_Projektaufgaben.png', 'Projekt Intranet-Relaunch mit Team, Fortschritt und drei tatsächlichen Aufgaben.')
             page.get_by_role('link', name='← Alle Projekte', exact=True).click()
             expect(page.get_by_role('heading', name='Projekte', exact=True)).to_be_visible()
