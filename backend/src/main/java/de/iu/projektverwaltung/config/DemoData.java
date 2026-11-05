@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -19,18 +20,27 @@ public class DemoData implements CommandLineRunner {
     private final ProjectRepository projects;
     private final TaskRepository tasks;
     private final PasswordEncoder passwords;
+
     public DemoData(TenantRepository tenants, UserRepository users, ProjectRepository projects,
                     TaskRepository tasks, PasswordEncoder passwords) {
-        this.tenants = tenants; this.users = users; this.projects = projects; this.tasks = tasks; this.passwords = passwords;
+        this.tenants = tenants;
+        this.users = users;
+        this.projects = projects;
+        this.tasks = tasks;
+        this.passwords = passwords;
     }
 
-    @Override @Transactional
+    @Override
+    @Transactional
     public void run(String... args) {
-        if (tenants.count() != 0) { return; }
+        if (tenants.count() != 0) {
+            return;
+        }
+
         Tenant demo = tenants.save(new Tenant("Muster IT GmbH"));
         Tenant second = tenants.save(new Tenant("Zweiter Demomandant"));
         String hash = passwords.encode("Demo2026!");
-        AppUser admin = users.save(new AppUser("admin", "Demo Administration", hash, Role.ADMIN, demo));
+        users.save(new AppUser("admin", "Demo Administration", hash, Role.ADMIN, demo));
         AppUser lead = users.save(new AppUser("leitung", "Demo Projektleitung", hash, Role.LEAD, demo));
         AppUser member = users.save(new AppUser("mitarbeiter", "Demo Mitarbeit", hash, Role.MEMBER, demo));
         AppUser foreign = users.save(new AppUser("fremd", "Demo Fremdmandant", hash, Role.ADMIN, second));

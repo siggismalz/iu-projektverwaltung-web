@@ -7,24 +7,33 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.*;
 
+/** Prüft Projektzugriffe und setzt die Regeln für Mitglieder und Aufgaben um. */
 @Service
+// Schreibmethoden bilden eine Transaktion. JPA speichert Änderungen an geladenen Objekten automatisch.
 @Transactional(readOnly = true)
 public class ProjectService {
     private final ProjectRepository projects;
     private final TaskRepository tasks;
     private final UserRepository users;
     private final UserService userService;
+
     public ProjectService(ProjectRepository projects, TaskRepository tasks,
                           UserRepository users, UserService userService) {
-        this.projects = projects; this.tasks = tasks; this.users = users; this.userService = userService;
+        this.projects = projects;
+        this.tasks = tasks;
+        this.users = users;
+        this.userService = userService;
     }
 
     public List<ProjectView> list(Authentication auth) {
         AppUser actor = userService.current(auth);
         return projects.findAllByTenantIdOrderByIdAsc(actor.getTenant().getId()).stream()
-                .filter(project -> mayRead(actor, project)).map(this::view).toList();
+                .filter(project -> mayRead(actor, project))
+                .map(this::view)
+                .toList();
     }
 
     @Transactional
@@ -33,7 +42,9 @@ public class ProjectService {
         requireLeader(actor);
         Set<AppUser> members = members(actor, input.memberIds());
         // Projektleitungen behalten Zugriff auf die von ihnen angelegten Projekte.
-        if (actor.getRole() == Role.LEAD) { members.add(actor); }
+        if (actor.getRole() == Role.LEAD) {
+            members.add(actor);
+        }
         Project project = new Project(input.name().strip(), input.description().strip(), actor.getTenant(), members);
         return view(projects.save(project));
     }
@@ -44,14 +55,22 @@ public class ProjectService {
         Project project = accessible(actor, id);
         requireLeader(actor);
         Set<AppUser> members = members(actor, input.memberIds());
-        if (actor.getRole() == Role.LEAD) { members.add(actor); }
+        // Auch beim Bearbeiten darf die Projektleitung sich nicht selbst aussperren.
+        if (actor.getRole() == Role.LEAD) {
+            members.add(actor);
+        }
+
         Set<Long> memberIds = new HashSet<>();
-        members.forEach(user -> memberIds.add(user.getId()));
-        boolean assignedRemoved = tasks.findAllByProjectIdOrderByIdAsc(id).stream()
-                .anyMatch(task -> task.getAssignee() != null && !memberIds.contains(task.getAssignee().getId()));
-        if (assignedRemoved) {
-            throw new ApiException(HttpStatus.CONFLICT,
-                    "Mitglied hat noch zugewiesene Aufgaben. Bitte Aufgaben zuerst neu zuordnen.");
+        for (AppUser member : members) {
+            memberIds.add(member.getId());
+        }
+        // Eine Aufgabe darf nach der Änderung keinem ausgeschiedenen Mitglied gehören.
+        for (Task task : tasks.findAllByProjectIdOrderByIdAsc(id)) {
+            AppUser responsible = task.getAssignee();
+            if (responsible != null && !memberIds.contains(responsible.getId())) {
+                throw new ApiException(HttpStatus.CONFLICT,
+                        "Mitglied hat noch zugewiesene Aufgaben. Bitte Aufgaben zuerst neu zuordnen.");
+            }
         }
         project.update(input.name().strip(), input.description().strip(), input.archived(), members);
         return view(project);
@@ -62,6 +81,7 @@ public class ProjectService {
         AppUser actor = userService.current(auth);
         Project project = accessible(actor, id);
         requireLeader(actor);
+        // Aufgaben und Projekt werden zusammen gelöscht oder bei einem Fehler zurückgerollt.
         tasks.deleteAllByProjectId(id);
         projects.delete(project);
     }
@@ -101,6 +121,7 @@ public class ProjectService {
     }
 
     private Project accessible(AppUser actor, Long id) {
+        // Zuerst den Mandanten eingrenzen: Eine fremde ID gibt keine fremden Daten frei.
         Project project = projects.findByIdAndTenantId(id, actor.getTenant().getId()).orElseThrow(() ->
                 new ApiException(HttpStatus.NOT_FOUND, "Projekt nicht gefunden."));
         if (!mayRead(actor, project)) {
@@ -110,6 +131,7 @@ public class ProjectService {
     }
 
     private Task accessibleTask(AppUser actor, Long id) {
+        // Auch der direkte Aufruf einer Aufgaben-ID muss den Projektzugriff prüfen.
         Task task = tasks.findByIdAndProjectTenantId(id, actor.getTenant().getId()).orElseThrow(() ->
                 new ApiException(HttpStatus.NOT_FOUND, "Aufgabe nicht gefunden."));
         if (!mayRead(actor, task.getProject())) {
@@ -119,6 +141,7 @@ public class ProjectService {
     }
 
     private boolean mayRead(AppUser actor, Project project) {
+        // Die Administration sieht den eigenen Mandanten, alle anderen nur eigene Projekte.
         return actor.getRole() == Role.ADMIN || project.getMembers().stream()
                 .anyMatch(member -> member.getId().equals(actor.getId()));
     }
@@ -130,6 +153,7 @@ public class ProjectService {
     }
 
     private void requireActive(Project project) {
+        // Archivierte Projekte bleiben lesbar; ihre Aufgaben dürfen sich nicht mehr ändern.
         if (project.isArchived()) {
             throw new ApiException(HttpStatus.CONFLICT, "Projekt ist archiviert. Aufgaben können nur gelesen werden.");
         }
@@ -138,6 +162,7 @@ public class ProjectService {
     private Set<AppUser> members(AppUser actor, Set<Long> ids) {
         Set<AppUser> result = new LinkedHashSet<>();
         for (Long id : ids) {
+            // Mitglieder werden immer im Mandanten der angemeldeten Person gesucht.
             result.add(users.findByIdAndTenantId(id, actor.getTenant().getId()).orElseThrow(() ->
                     new ApiException(HttpStatus.BAD_REQUEST, "Projektmitglied ist im eigenen Mandanten nicht verfügbar.")));
         }
@@ -145,7 +170,10 @@ public class ProjectService {
     }
 
     private AppUser assignee(AppUser actor, Project project, Long id) {
-        if (id == null) { return null; }
+        // Eine Aufgabe darf ohne verantwortliche Person angelegt werden.
+        if (id == null) {
+            return null;
+        }
         AppUser user = users.findByIdAndTenantId(id, actor.getTenant().getId()).orElseThrow(() ->
                 new ApiException(HttpStatus.BAD_REQUEST, "Verantwortliche Person ist im eigenen Mandanten nicht verfügbar."));
         if (project.getMembers().stream().noneMatch(member -> member.getId().equals(id))) {
@@ -158,6 +186,7 @@ public class ProjectService {
         List<AppUser> members = project.getMembers().stream().sorted(Comparator.comparing(AppUser::getId)).toList();
         long total = tasks.countByProjectId(project.getId());
         long done = tasks.countByProjectIdAndStatus(project.getId(), TaskStatus.DONE);
+        // Nur erledigte Aufgaben zählen zum Fortschritt. Ohne Aufgaben beträgt er 0 Prozent.
         int progress = total == 0 ? 0 : (int) Math.round(done * 100.0 / total);
         return new ProjectView(project.getId(), project.getName(), project.getDescription(), project.isArchived(),
                 members.stream().map(AppUser::getId).toList(), members.stream().map(AppUser::getDisplayName).toList(),

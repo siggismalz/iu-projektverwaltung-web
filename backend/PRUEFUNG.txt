@@ -30,7 +30,8 @@ Tatsächlich ausgeführte Testmethoden:
 
 Datei-Neustartprüfung wird davon getrennt über tests/dateipersistenz_pruefen.py belegt:
 Dreimal speichern, eigenen Prozess unmittelbar nach API-Bestätigung beenden und neu starten.
-Alle drei Fälle nach SET WRITE_DELAY 0 bestanden. Details in docs/Neustartpruefung.json.
+Alle drei Fälle nach SET WRITE_DELAY 0 bestanden. Das Skript erzeugt einen JSON-Einzelbericht
+unter tests/Ergebnisse oder am mit --output gewählten Pfad.
 Die Konfiguration beseitigt den zuvor beobachteten Verlust bei verzögertem Log-Flush.
 Kein Stromausfall-, Defekt-, Backup-, Last- oder umfassender Sicherheitsnachweis.
 

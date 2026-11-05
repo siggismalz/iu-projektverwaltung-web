@@ -1,3 +1,8 @@
 package de.iu.projektverwaltung.model;
 
-public enum Role { ADMIN, LEAD, MEMBER }
+/** Die drei Rollen steuern die Rechte in der Anwendung. */
+public enum Role {
+    ADMIN,
+    LEAD,
+    MEMBER
+}

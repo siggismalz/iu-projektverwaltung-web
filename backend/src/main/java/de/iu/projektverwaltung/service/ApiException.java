@@ -2,10 +2,16 @@ package de.iu.projektverwaltung.service;
 
 import org.springframework.http.HttpStatus;
 
+/** Verbindet einen fachlichen Fehler mit dem passenden HTTP-Status. */
 public class ApiException extends RuntimeException {
     private final HttpStatus status;
+
     public ApiException(HttpStatus status, String message) {
-        super(message); this.status = status;
+        super(message);
+        this.status = status;
     }
-    public HttpStatus getStatus() { return status; }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
 }

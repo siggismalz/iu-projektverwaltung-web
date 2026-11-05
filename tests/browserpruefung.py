@@ -1,16 +1,29 @@
 """Reale Browserabnahme gegen die lokal gestartete Anwendung mit separater Abnahme-Datenbank."""
+import argparse
 from pathlib import Path
 import json
+import os
 import sys
 from datetime import datetime
 
-ROOT = Path(__file__).resolve().parent
-sys.stdout.reconfigure(encoding='utf-8')
-sys.path.insert(0, str(ROOT / 'werkzeuge'))
 from playwright.sync_api import sync_playwright, expect
 
-BASE = 'http://127.0.0.1:8080'
-OUT = ROOT / 'Bericht'
+ROOT = Path(__file__).resolve().parent
+sys.stdout.reconfigure(encoding='utf-8')
+
+# Die Anwendung muss bereits mit einer neuen, separaten Prüfdatenbank laufen.
+# Der Ausgabeordner kann außerhalb des Projekts liegen; es werden keine Dateien gelöscht.
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--url', default='http://127.0.0.1:8080', help='Adresse der Prüf-Anwendung')
+parser.add_argument('--output', type=Path, default=ROOT / 'Bericht', help='Ordner für Ergebnisse und Bilder')
+parser.add_argument(
+    '--chrome', type=Path,
+    default=Path(os.environ.get('PROGRAMFILES', r'C:\Program Files')) / 'Google/Chrome/Application/chrome.exe',
+    help='Pfad zum installierten Google Chrome',
+)
+args = parser.parse_args()
+BASE = args.url.rstrip('/')
+OUT = args.output.resolve()
 IMAGES = OUT / 'Abbildungen'
 IMAGES.mkdir(parents=True, exist_ok=True)
 RESULT = OUT / 'browserpruefung.json'
@@ -28,6 +41,7 @@ def persist():
 
 
 def scenario(name, action):
+    # Nach jedem Szenario sichern, damit auch ein abgebrochener Lauf nachvollziehbar bleibt.
     try:
         evidence = action()
         report['szenarien'].append({'name': name, 'status': 'BESTANDEN', 'nachweis': evidence})
@@ -41,6 +55,7 @@ def scenario(name, action):
 
 
 def observe(page):
+    # Browserfehler und unerwartete Serverfehler werden am Ende gemeinsam geprüft.
     page.on('pageerror', lambda error: report['javascript_fehler'].append(str(error)))
     def response(res):
         if res.status >= 500:
@@ -74,6 +89,7 @@ def get_json(page, path):
 
 
 def no_overflow(page):
+    # Mobile Seiten und Dialoge dürfen nicht über den rechten Bildschirmrand hinausragen.
     bounds = page.evaluate('''() => ({viewport:innerWidth,document:document.documentElement.scrollWidth,
       body:document.body.scrollWidth,dialog:document.querySelector('dialog[open]') ? {
       width:document.querySelector('dialog[open]').clientWidth,
@@ -89,7 +105,7 @@ def no_overflow(page):
 
 def main():
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(headless=True, executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe')
+        browser = playwright.chromium.launch(headless=True, executable_path=str(args.chrome))
         context = browser.new_context(viewport=report['desktop'], locale='de-DE', reduced_motion='reduce')
         page = context.new_page()
         observe(page)
@@ -97,6 +113,7 @@ def main():
         expect(page.get_by_role('heading', name='Willkommen zurück')).to_be_visible()
         screenshot(page, '01_Login.png', 'Tatsächliche Anmeldeseite vor der Eingabe.')
 
+        # Zuerst Anmeldung, Navigation und Darstellung an unveränderten Demodaten prüfen.
         def bad_login():
             page.get_by_label('Benutzername', exact=True).fill('admin')
             page.get_by_label('Passwort', exact=True).fill('AbsichtlichFalsch!')
@@ -201,6 +218,7 @@ def main():
         print('SCREENSHOTS_BEREIT', str(IMAGES), flush=True)
         persist()
 
+        # Erst jetzt fiktive Prüfdaten über die Oberfläche anlegen und bearbeiten.
         def create_user():
             page.get_by_role('link', name='Benutzerverwaltung', exact=True).click()
             page.get_by_role('button', name='Benutzerkonto anlegen', exact=True).click()
@@ -312,6 +330,7 @@ def main():
             return {'anmeldeseite_sichtbar': True, 'session_http_status': response.status}
         scenario('Abmelden beendet die Sitzung', logout)
 
+        # Ein erneuter Rollen- und Mandantenwechsel darf keine fremden Inhalte zeigen.
         def member_access():
             login(page, 'mitarbeiter')
             expect(page.get_by_role('link', name='Benutzerverwaltung', exact=True)).to_have_count(0)

@@ -3,4 +3,9 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles.css';
 
-createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
+// React übernimmt den einzigen Einstiegspunkt aus index.html.
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
