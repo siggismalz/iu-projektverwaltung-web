@@ -36,7 +36,8 @@ Copy-Item -Path (Join-Path $projektPfad 'frontend\dist\*') -Destination $staticP
 
 Push-Location $backendPfad
 try {
-    & .\mvnw.cmd verify
+    # Alte Klassen und Frontend-Bundles dürfen nicht in die neue JAR gelangen.
+    & .\mvnw.cmd clean verify
     if ($LASTEXITCODE -ne 0) { throw 'Backend-Build oder Tests fehlgeschlagen.' }
 } finally { Pop-Location }
 Write-Host 'Build und Tests erfolgreich. Anwendung mit Starten.ps1 starten.'

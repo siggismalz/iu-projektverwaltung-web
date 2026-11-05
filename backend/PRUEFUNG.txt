@@ -1,6 +1,6 @@
 BACKEND-PRÜFNACHWEIS - 05.11.2026
 
-Aktueller Gesamtbuild: Bauen.ps1 mit npm ci, React-TypeScript-Build und Maven verify.
+Aktueller Gesamtbuild: Bauen.ps1 mit npm ci, React-TypeScript-Build und Maven clean verify.
 Spring Boot 3.5.16, Java 21, Hibernate 6.6.53.Final, H2 2.3.232.
 Ergebnis: 19 Tests; 0 Fehlschläge; 0 Fehler; 0 übersprungen.
 
