@@ -13,8 +13,3 @@ daten/
 Thumbs.db
 
 *.tsbuildinfo
-tests/Bericht/
-tests/werkzeuge/
-
-tests/Ergebnisse/
-__pycache__/
