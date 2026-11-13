@@ -5,6 +5,7 @@ Eine lokale Webanwendung zum Verwalten von Projekten, Mitarbeitenden und Aufgabe
 ## Voraussetzungen
 
 - Windows mit PowerShell
+- Git zum Klonen des Repositorys
 - JDK 21 oder neuer
 - Node.js 20 ab Version 20.19 oder Node.js ab Version 22.12, jeweils mit npm
 - Internetzugang für den ersten Build
@@ -36,7 +37,7 @@ Alle Demokonten haben das Passwort **Demo2026!**.
 | `mitarbeiter` | Mitarbeitende: zugeordnete Projekte und Aufgaben bearbeiten |
 | `fremd` | Administration eines zweiten, getrennten Mandanten |
 
-Für eine kurze Vorführung als `admin` anmelden, ein Projekt öffnen und eine Aufgabe anlegen. Anschließend ihren Status auf „erledigt“ setzen und die Fortschrittsanzeige prüfen. Über „Benutzer“ lassen sich Konten und Rollen verwalten.
+Für eine kurze Vorführung als `admin` anmelden, ein Projekt öffnen und eine Aufgabe anlegen. Anschließend ihren Status auf „erledigt“ setzen und die Fortschrittsanzeige prüfen. Über „Benutzerverwaltung“ lassen sich Konten und Rollen verwalten.
 
 ## Nach Änderungen neu bauen
 
