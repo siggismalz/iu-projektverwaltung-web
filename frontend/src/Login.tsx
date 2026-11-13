@@ -4,7 +4,6 @@ import { errorMessage, mutate, request } from './api';
 import { Brand, Icon } from './components';
 import type { Session } from './types';
 
-// Nach erfolgreicher Anmeldung wird die Sitzung geladen und an App übergeben.
 export default function Login({ onLogin }: { onLogin: (session: Session) => void }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

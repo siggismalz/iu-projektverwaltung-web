@@ -29,7 +29,6 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
   if (!response.ok) {
     const supplied =
       body && typeof body === 'object' && 'message' in body ? String(body.message) : '';
-    // Fachliche Fehlermeldungen des Servers haben Vorrang vor der Standardmeldung.
     throw new ApiError(supplied || statusMessage(response.status), response.status);
   }
   return body as T;
@@ -66,7 +65,6 @@ function statusMessage(status: number): string {
   return 'Die Aktion konnte nicht gespeichert werden. Bitte prüfe deine Eingaben.';
 }
 
-// Auch unbekannte Fehler liefern eine verständliche Meldung für die Oberfläche.
 export function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : 'Ein unerwarteter Fehler ist aufgetreten.';
 }

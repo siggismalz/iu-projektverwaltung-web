@@ -1,4 +1,3 @@
-// Diese Typen beschreiben die JSON-Daten des Backends. Feldnamen stimmen mit der API überein.
 export type Role = 'ADMIN' | 'LEAD' | 'MEMBER';
 export type TaskStatus = 'OPEN' | 'IN_PROGRESS' | 'DONE';
 export interface User {
@@ -30,7 +29,6 @@ export interface Task {
   assigneeName: string | null;
   projectId: number;
 }
-// Technische Rollen- und Statuswerte werden in der Oberfläche deutsch angezeigt.
 export const roleNames: Record<Role, string> = {
   ADMIN: 'Administration',
   LEAD: 'Projektleitung',

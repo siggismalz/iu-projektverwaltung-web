@@ -4,7 +4,9 @@ Lokale Webanwendung für Projekte und Aufgaben eines IT-Dienstleisters. React mi
 
 ## Starten
 
-Benötigt werden JDK 21 oder neuer und Node.js mit npm. Der erste Build lädt die Abhängigkeiten aus dem Internet; der Maven-Wrapper lädt Maven selbst.
+Zum Bauen werden JDK 21 oder neuer und Node.js 20 ab 20.19 oder Node.js ab 22.12 mit npm benötigt. Der erste Build lädt die Abhängigkeiten aus dem Internet; der Maven-Wrapper lädt Maven selbst. Für die mitgelieferte fertige JAR genügt Java 21 oder neuer.
+
+`JAVA_HOME` muss auf das JDK-Verzeichnis zeigen, beispielsweise `C:\Program Files\Java\jdk-21`. Das Buildskript sucht alternativ in üblichen Installationsordnern nach einem JDK.
 
 Unter Windows `Starten.cmd` doppelt anklicken oder im Projektordner ausführen:
 

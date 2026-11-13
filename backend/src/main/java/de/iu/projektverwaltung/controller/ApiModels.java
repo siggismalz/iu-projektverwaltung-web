@@ -15,7 +15,6 @@ public final class ApiModels {
 
     public record SessionView(Long id, String username, String displayName, Role role, String tenantName) { }
 
-    // Die Prüfung erfolgt durch @Valid im Controller, bevor ein Service die Daten übernimmt.
     public record NewUser(
             @NotBlank(message = "Benutzername fehlt.")
             @Pattern(regexp = "[a-zA-Z0-9._-]{3,40}",

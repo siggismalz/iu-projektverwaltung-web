@@ -63,19 +63,28 @@ def main():
                                   '--spring.datasource.url=jdbc:h2:file:'+str(run_dir/'daten').replace('\\','/')],
                                  cwd=run_dir, stdout=log, stderr=subprocess.STDOUT,
                                  creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
-        for _ in range(150):
-            if child.poll() is not None:
-                raise RuntimeError('Java-Start fehlgeschlagen; die Datei java_*.log enthält die Ursache. JDK 21 erforderlich.')
-            try:
-                response = requests.get(address+'/csrf', timeout=.3)
-                if response.status_code == 200:
+        deadline = time.monotonic() + 30
+        try:
+            while time.monotonic() < deadline:
+                if child.poll() is not None:
+                    raise RuntimeError('Java-Start fehlgeschlagen; die Datei java_*.log enthält die Ursache. JDK 21 erforderlich.')
+                try:
+                    # /csrf ist bereits erreichbar, bevor die Demokonten gespeichert sind.
+                    with requests.Session() as probe:
+                        mutate(probe, '/login', {'username': 'admin', 'password': 'Demo2026!'}, form=True)
                     return child
-            except requests.RequestException:
-                pass
-            time.sleep(.1)
-        child.kill()
-        child.wait()
-        raise RuntimeError('Die eigene Prüf-Anwendung wurde nicht rechtzeitig bereit.')
+                except requests.HTTPError as error:
+                    if error.response.status_code != 401:
+                        raise
+                except (requests.ConnectionError, requests.Timeout):
+                    pass
+                time.sleep(.1)
+            raise RuntimeError('Die eigene Prüf-Anwendung wurde nicht rechtzeitig zur Anmeldung bereit.')
+        except Exception:
+            if child.poll() is None:
+                child.kill()
+                child.wait(timeout=15)
+            raise
 
     def mutate(session, path, data, form=False):
         token_response = session.get(address+'/csrf', timeout=10)
@@ -99,12 +108,14 @@ def main():
             marker = uuid.uuid4().hex
             project = mutate(session, '/projects', {'name': 'Neustartprüfung '+marker[:8], 'description': marker, 'memberIds': []})
             task = mutate(session, f"/projects/{project['id']}/tasks", {'title': 'Gespeicherte Prüfaufgabe '+marker[:8], 'description': marker, 'status': 'DONE', 'assigneeId': None})
-            before = datetime.now().astimezone().isoformat()
             response_time = time.perf_counter()
+            before = datetime.now().astimezone().isoformat()
             previous_pid = process.pid
-            # Direkt nach bestätigtem Speichern abbrechen, ohne zusätzliche Wartezeit.
+            # Gemessen wird ab der verarbeiteten JSON-Antwort, getrennt von der Dauer des kill()-Aufrufs.
+            kill_started = time.perf_counter()
             process.kill()
-            kill_delay = (time.perf_counter()-response_time)*1000
+            kill_duration = (time.perf_counter()-kill_started)*1000
+            kill_delay = (kill_started-response_time)*1000
             process.wait(timeout=15)
             session.close()
             process = start()
@@ -122,14 +133,17 @@ def main():
             assert loaded_task['status'] == 'DONE' and loaded_project['progress'] == 100
             assert kill_delay < 50, 'Der Test soll ausdrücklich ohne längere Wartezeit abbrechen.'
             evidence = {'nummer': number, 'status': 'BESTANDEN', 'zeit_vorher': before,
-                        'zeit_nachher': datetime.now().astimezone().isoformat(), 'abbruch_nach_apiantwort_ms': round(kill_delay,3),
+                        'zeit_nachher': datetime.now().astimezone().isoformat(),
+                        'apiantwort_verarbeitet_bis_abbruchaufruf_ms': round(kill_delay,3),
+                        'dauer_abbruchaufruf_ms': round(kill_duration,3),
                         'prozess_vorher': previous_pid, 'prozess_nachher': process.pid,
                         'marker': marker, 'projekt': project, 'aufgabe': task,
                         'projekt_nachher': loaded_project, 'aufgabe_nachher': loaded_task}
             result['durchlaeufe'].append(evidence)
             session.close()
             save()
-            print(f'Durchlauf {number}: BESTANDEN; Abbruchaufruf nach {kill_delay:.3f} ms abgeschlossen.', flush=True)
+            print(f'Durchlauf {number}: BESTANDEN; Abbruchaufruf {kill_delay:.3f} ms nach verarbeiteter API-Antwort, '
+                  f'Aufrufdauer {kill_duration:.3f} ms.', flush=True)
         result.update(status='BESTANDEN', abgeschlossen=datetime.now().astimezone().isoformat(), wiederholungen=3)
         result.update({key:value for key,value in result['durchlaeufe'][-1].items() if key not in ['nummer','status']})
         result['grenze'] = 'Kein Test eines Stromausfalls, defekter Datenträger oder der Wiederherstellung aus einer Sicherung.'

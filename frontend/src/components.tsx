@@ -48,7 +48,6 @@ export function Brand() {
   );
 }
 
-// Gemeinsame Meldungen sorgen auf allen Seiten für dieselbe Fehler- und Ladeanzeige.
 export function ErrorNotice({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
     <div className="notice error" role="alert">
@@ -164,7 +163,6 @@ export function Modal({
   );
 }
 
-// Alle Dialoge sperren während einer laufenden Speicherung dieselben Schaltflächen.
 export function FormActions({
   busy,
   onCancel,

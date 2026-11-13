@@ -20,7 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** Echte HTTP-Controller, Securityfilter, Services und H2/JPA gemeinsam. Keine Repository-Mocks. */
+/** Prüft Controller, Securityfilter, Services und H2/JPA gemeinsam über MockMvc. */
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
@@ -247,6 +247,18 @@ class ApiIntegrationTest {
     }
 
     @Test
+    @DisplayName("Neue Projekte können nicht bereits archiviert angelegt werden")
+    void archivedNewProjectIsRejectedWithoutSavingIt() throws Exception {
+        long projectCount = projects.count();
+        mvc.perform(post("/api/projects").with(user("leitung")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(projectBody("Archivierter Neuzugang", Set.of(member.getId()), true)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", containsString("Neue Projekte sind aktiv")));
+        assertThat(projects.count()).isEqualTo(projectCount);
+    }
+
+    @Test
     @DisplayName("Projektmitglieder müssen zum eigenen Mandanten gehören")
     void projectMemberAssignmentCannotCrossTenantBoundary() throws Exception {
         mvc.perform(post("/api/projects").with(user("admin")).with(csrf()).contentType(MediaType.APPLICATION_JSON)
@@ -352,7 +364,6 @@ class ApiIntegrationTest {
         assertThat(tasks.countByProjectId(portal.getId())).isEqualTo(taskCount);
     }
 
-    // Kleine Helfer halten den Aufbau der Testanfragen an einer Stelle.
     private JsonNode body(MvcResult response) throws Exception {
         return json.readTree(response.getResponse().getContentAsString());
     }

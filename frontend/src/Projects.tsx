@@ -14,7 +14,6 @@ type Props = {
   onSaved: (message: string) => Promise<void>;
 };
 
-// Verbindet Projektübersicht, Suche und Bearbeitungsdialog mit der Detailansicht.
 export default function Projects({ projects, users, session, route, loading, onSaved }: Props) {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('active');
@@ -35,12 +34,13 @@ export default function Projects({ projects, users, session, route, loading, onS
     return matchesFilter && text.includes(searchTerm);
   });
 
-  let emptyTitle = 'Hier beginnt dein nächstes Projekt';
+  let emptyTitle = 'Keine Projekte vorhanden';
   if (search) emptyTitle = 'Keine passenden Projekte';
   else if (filter === 'archived') emptyTitle = 'Noch keine archivierten Projekte';
 
   let emptyMessage = 'Sobald dir ein Projekt zugeordnet wurde, erscheint es hier.';
   if (search) emptyMessage = 'Probiere einen anderen Suchbegriff oder passe den Filter an.';
+  else if (filter === 'archived') emptyMessage = 'Archivierte Projekte erscheinen in dieser Ansicht.';
   else if (canManage) emptyMessage = 'Lege ein Projekt an und ordne dein Team zu.';
 
   return (
@@ -221,7 +221,6 @@ export default function Projects({ projects, users, session, route, loading, onS
   );
 }
 
-// Ein Formular wird sowohl zum Anlegen als auch zum Bearbeiten eines Projekts verwendet.
 function ProjectForm({
   project,
   users,
@@ -361,7 +360,6 @@ function ProjectForm({
   );
 }
 
-// Lädt die Aufgaben des geöffneten Projekts und bietet den Statusfilter an.
 function ProjectDetail({
   project,
   session,
@@ -406,7 +404,6 @@ function ProjectDetail({
   }, [loadTasks]);
   const visible = tasks.filter((task) => status === 'all' || task.status === status);
 
-  // Ladezustand und Fehler haben Vorrang vor der eigentlichen Aufgabenliste.
   function renderTasks() {
     if (error) return <ErrorNotice message={error} onRetry={() => void loadTasks()} />;
     if (loading) return <Loading text="Aufgaben werden geladen …" />;
@@ -414,7 +411,7 @@ function ProjectDetail({
     if (visible.length === 0) {
       let message = 'Wähle einen anderen Status, um weitere Aufgaben zu sehen.';
       if (status === 'all') {
-        message = 'Erstelle die erste Aufgabe und bring dein Projekt in Bewegung.';
+        message = 'Über „Neue Aufgabe“ kannst du eine Aufgabe für dieses Projekt anlegen.';
         if (project.archived) {
           message = 'Für dieses archivierte Projekt wurden keine Aufgaben angelegt.';
         }

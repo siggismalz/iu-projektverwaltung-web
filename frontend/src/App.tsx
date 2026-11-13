@@ -7,7 +7,6 @@ import Users from './Users';
 import { roleNames } from './types';
 import type { Project, Session, User } from './types';
 
-// Verwaltet die Sitzung und zeigt die über den URL-Hash ausgewählte Seite an.
 export default function App() {
   // undefined: Sitzung wird geprüft; null: nicht angemeldet; Session: angemeldet.
   const [session, setSession] = useState<Session | null>();
@@ -62,8 +61,13 @@ export default function App() {
       }
     } catch (err) {
       if (sequence !== requestSequence.current) return;
-      if (err instanceof ApiError && err.status === 401) setSession(null);
-      else setError(errorMessage(err));
+      if (err instanceof ApiError && err.status === 401) {
+        // Nach Sitzungsverlust dürfen Daten des bisherigen Kontos nicht erhalten bleiben.
+        setProjects([]);
+        setUsers([]);
+        setNotice('');
+        setSession(null);
+      } else setError(errorMessage(err));
     } finally {
       if (sequence === requestSequence.current) setLoading(false);
     }
@@ -117,6 +121,7 @@ export default function App() {
       <Login
         onLogin={(s) => {
           location.hash = 'projects';
+          setLoading(true);
           setSession(s);
         }}
       />
@@ -131,9 +136,10 @@ export default function App() {
     await load();
   }
 
-  // Die Seitenauswahl bleibt vom gemeinsamen Rahmen mit Navigation getrennt.
   let content;
-  if (loading && projects.length === 0) {
+  if (error && projects.length === 0) {
+    content = null;
+  } else if (loading && projects.length === 0) {
     content = <Loading />;
   } else if (isUsers && session.role !== 'ADMIN') {
     content = (

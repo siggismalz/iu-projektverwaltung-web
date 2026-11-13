@@ -25,7 +25,6 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository users) {
-        // Die Anmeldung vergleicht das eingegebene Passwort mit dem gespeicherten BCrypt-Hash.
         return username -> users.findByUsername(username.toLowerCase(Locale.ROOT))
                 .map(user -> User.withUsername(user.getUsername())
                         .password(user.getPasswordHash())

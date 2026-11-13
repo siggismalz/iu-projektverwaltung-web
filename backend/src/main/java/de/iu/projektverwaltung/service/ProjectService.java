@@ -40,6 +40,10 @@ public class ProjectService {
     public ProjectView create(Authentication auth, ProjectInput input) {
         AppUser actor = userService.current(auth);
         requireLeader(actor);
+        if (input.archived()) {
+            throw new ApiException(HttpStatus.BAD_REQUEST,
+                    "Neue Projekte sind aktiv. Ein bestehendes Projekt kann anschließend archiviert werden.");
+        }
         Set<AppUser> members = members(actor, input.memberIds());
         // Projektleitungen behalten Zugriff auf die von ihnen angelegten Projekte.
         if (actor.getRole() == Role.LEAD) {

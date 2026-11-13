@@ -357,6 +357,50 @@ def main():
             return {'benutzername': 'fremd', 'sichtbare_projekte': names, 'andere_mandanten_unsichtbar': True}
         scenario('Separater Mandant zeigt ausschließlich eigene Projekte', tenant_access)
 
+        def session_loss():
+            login(page, 'admin')
+            page.get_by_role('link', name='Intranet-Relaunch', exact=True).click()
+            page.get_by_role('button', name='Projekt bearbeiten', exact=True).click()
+
+            # Eine zweite Registerkarte kann die gemeinsame Serversitzung beenden.
+            # Hier geschieht dies zwischen dem Speichern und dem anschließenden Nachladen.
+            def end_session(route):
+                csrf = get_json(page, '/csrf')
+                response = page.request.post(BASE + '/api/logout',
+                    headers={csrf['headerName']: csrf['token']})
+                assert response.ok, response.status
+                route.continue_()
+
+            page.route('**/api/projects', end_session, times=1)
+            page.get_by_role('dialog').get_by_role('button', name='Änderungen speichern', exact=True).click()
+            expect(page.get_by_role('heading', name='Willkommen zurück')).to_be_visible()
+
+            # Der Netzfehler beim nächsten Konto ist absichtlich simuliert. Alte Daten
+            # dürfen auch dann nicht wieder erscheinen, wenn das Nachladen fehlschlägt.
+            def interrupt_projects(route):
+                route.abort('failed')
+
+            page.route('**/api/projects', interrupt_projects)
+            page.get_by_label('Benutzername', exact=True).fill('fremd')
+            page.get_by_label('Passwort', exact=True).fill('Demo2026!')
+            page.get_by_role('button', name='Anmelden', exact=True).click()
+            expect(page.get_by_role('alert')).to_contain_text('Die Verbindung ist unterbrochen.')
+            expect(page.get_by_role('link', name='Intranet-Relaunch', exact=True)).to_have_count(0)
+            expect(page.get_by_role('link', name='Kundenportal', exact=True)).to_have_count(0)
+            expect(page.get_by_role('heading', name='Keine Projekte vorhanden')).to_have_count(0)
+            expect(page.locator('.nav-count')).to_have_text('0')
+            assert get_json(page, '/session')['username'] == 'fremd'
+            page.unroute('**/api/projects', interrupt_projects)
+            page.get_by_role('button', name='Erneut versuchen', exact=True).click()
+            expect(page.get_by_role('link', name='Fremdes Projekt', exact=True)).to_be_visible()
+            expect(page.get_by_role('link', name='Intranet-Relaunch', exact=True)).to_have_count(0)
+            page.get_by_role('button', name='Abmelden', exact=True).click()
+            expect(page.get_by_role('heading', name='Willkommen zurück')).to_be_visible()
+            return {'sitzung_serverseitig_beendet': True, 'neues_konto': 'fremd',
+                    'nachladefehler': 'absichtlich durch Playwright simuliert',
+                    'alte_projekte_unsichtbar': True, 'erneutes_laden_erfolgreich': True}
+        scenario('Sitzungsverlust und Konto-Wechsel zeigen auch bei Ladefehlern keine alten Projekte', session_loss)
+
         def runtime_quality():
             assert report['javascript_fehler'] == [], report['javascript_fehler']
             assert report['serverfehler_5xx'] == [], report['serverfehler_5xx']

@@ -85,13 +85,13 @@ public class UserService {
         return view(target);
     }
 
-    public static void requireAdmin(AppUser user) {
+    private static void requireAdmin(AppUser user) {
         if (user.getRole() != Role.ADMIN) {
             throw new ApiException(HttpStatus.FORBIDDEN, "Nur die Administration darf Benutzerkonten und Rollen verwalten.");
         }
     }
 
-    public static UserView view(AppUser user) {
+    private static UserView view(AppUser user) {
         return new UserView(user.getId(), user.getUsername(), user.getDisplayName(), user.getRole());
     }
 }
